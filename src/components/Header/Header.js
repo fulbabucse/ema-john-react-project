@@ -13,16 +13,16 @@ const Header = () => {
           <div className="flex-none">
             <ul className="nav-items">
               <li className="nav-link">
-                <a href="/">Shop</a>
+                <a href="/shop">Shop</a>
               </li>
               <li className="nav-link">
-                <a href="/">Orders</a>
+                <a href="/orders">Orders</a>
               </li>
               <li className="nav-link">
-                <a href="/">Inventory</a>
+                <a href="/inventory">Inventory</a>
               </li>
               <li className="nav-link">
-                <a href="/">About</a>
+                <a href="/about">About</a>
               </li>
             </ul>
           </div>
