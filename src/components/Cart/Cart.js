@@ -7,8 +7,10 @@ const Cart = ({ cart }) => {
     totalPrice = totalPrice + product.price;
     shipping = shipping + product.shipping;
   }
-  const tax = (totalPrice * 10) / 100;
-  const grandTotal = totalPrice + shipping + tax;
+  const taxStr = ((totalPrice * 10) / 100).toFixed(2);
+  const tax = parseFloat(taxStr);
+  const grandTotalStr = (totalPrice + shipping + tax).toFixed(2);
+  const grandTotal = parseFloat(grandTotalStr);
   return (
     <div className="sticky top-2">
       <div className="py-10 px-10 sticky">
@@ -16,8 +18,8 @@ const Cart = ({ cart }) => {
         <p className="mt-4">Selected Items: {cart.length}</p>
         <p>Total Price: ${totalPrice}</p>
         <p>Total Shipping: ${shipping}</p>
-        <p>Tax: ${tax.toFixed(2)}</p>
-        <h3 className="text-xl">Grand Total: ${grandTotal.toFixed(2)}</h3>
+        <p>Tax: ${tax}</p>
+        <h3 className="text-xl">Grand Total: ${grandTotal}</h3>
       </div>
     </div>
   );
