@@ -1,0 +1,10 @@
+.nav-items {
+  display: flex;
+}
+
+.nav-link {
+  margin-left: 20px;
+}
+.nav-link > a {
+  color: #fff;
+}

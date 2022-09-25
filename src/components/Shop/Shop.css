@@ -1,0 +1,11 @@
+.shop-container {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  padding: 0 80px;
+}
+
+.cart-container {
+  width: 100%;
+  height: 100%;
+  background-color: #ff99004d;
+}
