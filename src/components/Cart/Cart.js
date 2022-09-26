@@ -3,8 +3,10 @@ import React from "react";
 const Cart = ({ cart }) => {
   let totalPrice = 0;
   let shipping = 0;
+  let quantity = 0;
   for (const product of cart) {
-    totalPrice = totalPrice + product.price;
+    quantity = quantity + product.quantity;
+    totalPrice = totalPrice + product.price * product.quantity;
     shipping = shipping + product.shipping;
   }
   const taxStr = ((totalPrice * 10) / 100).toFixed(2);
@@ -15,7 +17,7 @@ const Cart = ({ cart }) => {
     <div className="sticky top-2">
       <div className="py-10 px-10 sticky">
         <h1 className="text-3xl font-bold">Orders History</h1>
-        <p className="mt-4">Selected Items: {cart.length}</p>
+        <p className="mt-4">Selected Items: {quantity}</p>
         <p>Total Price: ${totalPrice}</p>
         <p>Total Shipping: ${shipping}</p>
         <p>Tax: ${tax}</p>
