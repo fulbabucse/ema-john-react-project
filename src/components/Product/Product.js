@@ -4,7 +4,7 @@ import React from "react";
 
 const Product = (props) => {
   const { addToCart, product } = props;
-  const { category, name, price, stock, img, shipping, seller } = product;
+  const { id, category, name, price, stock, img, shipping, seller } = product;
   return (
     <div>
       <div className="card card-compact bg-base-100 shadow-xl h-full">

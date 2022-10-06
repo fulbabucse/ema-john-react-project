@@ -1,21 +1,21 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { addToDb, getStoredCart } from "../../utilities/fakedb";
+import { Link, useLoaderData } from "react-router-dom";
+import {
+  addToDb,
+  deleteShoppingCart,
+  getStoredCart,
+} from "../../utilities/fakedb";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
 import Cart from "../Cart/Cart";
 import Product from "../Product/Product";
 import "./Shop.css";
 
 const Shop = () => {
-  const [products, setProducts] = useState([]);
-  const [cart, setCarts] = useState([]);
-  useEffect(() => {
-    fetch("products.json")
-      .then((res) => res.json())
-      .then((data) => setProducts(data));
-  }, []);
-
-  //   console.log(products.id);
+  const products = useLoaderData();
+  const [carts, setCarts] = useState([]);
 
   useEffect(() => {
     const storedCart = getStoredCart();
@@ -33,17 +33,22 @@ const Shop = () => {
 
   const addToCart = (selectedProduct) => {
     let newCart = [];
-    const exists = cart.find((product) => product.id === selectedProduct.id);
-    if (!exists) {
+    const exits = carts.find((product) => product.id === selectedProduct.id);
+    if (!exits) {
       selectedProduct.quantity = 1;
-      newCart = [...cart, selectedProduct];
+      newCart = [...carts, selectedProduct];
     } else {
-      const rest = cart.filter((product) => product.id !== selectedProduct.id);
-      exists.quantity = exists.quantity + 1;
-      newCart = [...rest, exists];
+      const rest = carts.filter((product) => product.id !== selectedProduct.id);
+      exits.quantity = exits.quantity + 1;
+      newCart = [...rest, exits];
     }
     setCarts(newCart);
     addToDb(selectedProduct.id);
+  };
+
+  const clearCart = () => {
+    setCarts([]);
+    deleteShoppingCart();
   };
 
   return (
@@ -59,7 +64,17 @@ const Shop = () => {
           ))}
         </div>
         <div className="cart-container">
-          <Cart cart={cart}></Cart>
+          <Cart cart={carts} clearCart={clearCart}>
+            <Link to="/orders">
+              <button className="btn btn-error w-full mt-5 text-white flex items-center">
+                Review Order{" "}
+                <FontAwesomeIcon
+                  icon={faArrowAltCircleRight}
+                  className="mx-2"
+                ></FontAwesomeIcon>
+              </button>
+            </Link>
+          </Cart>
         </div>
       </div>
     </div>
