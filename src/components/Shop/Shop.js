@@ -14,8 +14,10 @@ import Product from "../Product/Product";
 import "./Shop.css";
 
 const Shop = () => {
-  const products = useLoaderData();
   const [carts, setCarts] = useState([]);
+  const [showMore, setShowMore] = useState(6);
+  const productsData = useLoaderData();
+  const products = productsData.slice(0, showMore);
 
   useEffect(() => {
     const storedCart = getStoredCart();
@@ -51,6 +53,10 @@ const Shop = () => {
     deleteShoppingCart();
   };
 
+  const handleShowMore = () => {
+    setShowMore(showMore + showMore);
+  };
+
   return (
     <div>
       <div className="shop-container">
@@ -67,7 +73,7 @@ const Shop = () => {
           <Cart cart={carts} clearCart={clearCart}>
             <Link to="/orders">
               <button className="btn btn-error w-full mt-5 text-white flex items-center">
-                Review Order{" "}
+                Review Order
                 <FontAwesomeIcon
                   icon={faArrowAltCircleRight}
                   className="mx-2"
@@ -75,6 +81,11 @@ const Shop = () => {
               </button>
             </Link>
           </Cart>
+        </div>
+        <div className="text-center my-5">
+          <button onClick={handleShowMore} className="btn btn-sm btn-secondary">
+            Show More
+          </button>
         </div>
       </div>
     </div>

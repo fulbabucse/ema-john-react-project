@@ -1,9 +1,32 @@
 import React from "react";
+import { useState } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../contexts/UserContext";
 
 const Register = () => {
+  const [errorPassword, setErrorPassword] = useState(null);
+  const { createUser } = useContext(AuthContext);
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+    const confirm = form.confirm.value;
+    if (password.length < 8) {
+      setErrorPassword("Password should be 8 character or more!!");
+    } else if (password !== confirm) {
+      setErrorPassword("Your password did not match!!");
+      return;
+    }
+
+    createUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        form.reset();
+      })
+      .catch((err) => console.error(err));
   };
   return (
     <div
@@ -38,12 +61,21 @@ const Register = () => {
               className="input input-bordered"
               required
             />
-            <label className="label">
-              <a href="#" className="label-text-alt link link-hover">
-                Forgot password?
-              </a>
-            </label>
           </div>
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Confirm Password</span>
+            </label>
+            <input
+              type="password"
+              name="confirm"
+              placeholder="Confirm Password"
+              className="input input-bordered"
+              required
+            />
+          </div>
+          <p className="text-red-600">{errorPassword}</p>
           <div className="form-control mt-6">
             <button className="btn btn-primary">Register</button>
           </div>
