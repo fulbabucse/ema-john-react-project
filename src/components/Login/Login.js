@@ -1,9 +1,31 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/UserContext";
 
 const Login = () => {
+  const [errorPassword, setErrorPassword] = useState(null);
+  const { signInUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+    if (password.length < 8) {
+      setErrorPassword("Wrong password !!");
+    }
+
+    signInUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        form.reset();
+        navigate(from, { replace: true });
+      })
+      .catch((err) => console.error(err));
   };
   return (
     <div
@@ -43,6 +65,7 @@ const Login = () => {
                 Forgot password?
               </a>
             </label>
+            <p className="text-red-600">{errorPassword}</p>
           </div>
           <div className="form-control mt-6">
             <button className="btn btn-primary">Login</button>

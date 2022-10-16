@@ -31,13 +31,13 @@ const Cart = ({ cart, clearCart, children }) => {
         <h3 className="text-2xl">Grand Total: ${grandTotal}</h3>
       </div>
       <div className="my-5">
-        <button
+        {/* <button
           onClick={clearCart}
-          className="btn btn-warning text-slate-600 w-full flex items-center"
+          className="btn btn-sm btn-warning text-slate-600 w-full flex items-center"
         >
           Clear Cart
           <FontAwesomeIcon className="mx-3" icon={faTrashAlt}></FontAwesomeIcon>
-        </button>
+        </button> */}
 
         {children}
       </div>

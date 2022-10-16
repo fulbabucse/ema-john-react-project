@@ -72,7 +72,7 @@ const Shop = () => {
         <div className="cart-container">
           <Cart cart={carts} clearCart={clearCart}>
             <Link to="/orders">
-              <button className="btn btn-error w-full mt-5 text-white flex items-center">
+              <button className="btn btn-sm btn-error w-full mt-5 text-white flex items-center">
                 Review Order
                 <FontAwesomeIcon
                   icon={faArrowAltCircleRight}
