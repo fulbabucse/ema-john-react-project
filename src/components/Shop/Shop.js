@@ -15,15 +15,13 @@ import "./Shop.css";
 
 const Shop = () => {
   const [carts, setCarts] = useState([]);
-  const [showMore, setShowMore] = useState(6);
-  const productsData = useLoaderData();
-  const products = productsData.slice(0, showMore);
+  const products = useLoaderData();
 
   useEffect(() => {
     const storedCart = getStoredCart();
     const savedCart = [];
     for (const id in storedCart) {
-      const addedProduct = products.find((product) => product._id === id);
+      const addedProduct = products.find((product) => product.id === id);
       if (addedProduct) {
         const quantity = storedCart[id];
         addedProduct.quantity = quantity;
@@ -35,28 +33,22 @@ const Shop = () => {
 
   const addToCart = (selectedProduct) => {
     let newCart = [];
-    const exits = carts.find((product) => product._id === selectedProduct._id);
+    const exits = carts.find((product) => product.id === selectedProduct.id);
     if (!exits) {
       selectedProduct.quantity = 1;
       newCart = [...carts, selectedProduct];
     } else {
-      const rest = carts.filter(
-        (product) => product._id !== selectedProduct._id
-      );
+      const rest = carts.filter((product) => product.id !== selectedProduct.id);
       exits.quantity = exits.quantity + 1;
       newCart = [...rest, exits];
     }
     setCarts(newCart);
-    addToDb(selectedProduct._id);
+    addToDb(selectedProduct.id);
   };
 
   const clearCart = () => {
     setCarts([]);
     deleteShoppingCart();
-  };
-
-  const handleShowMore = () => {
-    setShowMore(showMore + showMore);
   };
 
   return (
@@ -66,7 +58,7 @@ const Shop = () => {
           {products.map((product) => (
             <Product
               product={product}
-              key={product._id}
+              key={product.id}
               addToCart={addToCart}
             ></Product>
           ))}
@@ -83,11 +75,6 @@ const Shop = () => {
               </button>
             </Link>
           </Cart>
-        </div>
-        <div className="text-center my-5">
-          <button onClick={handleShowMore} className="btn btn-sm btn-secondary">
-            Show More
-          </button>
         </div>
       </div>
     </div>
