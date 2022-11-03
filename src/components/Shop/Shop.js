@@ -15,7 +15,21 @@ import "./Shop.css";
 
 const Shop = () => {
   const [carts, setCarts] = useState([]);
-  const products = useLoaderData();
+  const [products, setProducts] = useState([]);
+  const [count, setCount] = useState(0);
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(10);
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/products?page=${page}&size=${size}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCount(data.count);
+        setProducts(data.products);
+      });
+  }, []);
+
+  const pages = Math.ceil(count / size);
 
   useEffect(() => {
     const storedCart = getStoredCart();
@@ -56,14 +70,47 @@ const Shop = () => {
   return (
     <div>
       <div className="shop-container">
-        <div className="product-container grid md:grid-cols-2 lg:grid-cols-3 gap-5 mt-4 mr-4">
-          {products.map((product) => (
-            <Product
-              product={product}
-              key={product._id}
-              addToCart={addToCart}
-            ></Product>
-          ))}
+        <div className="mb-6">
+          <div className="product-container grid md:grid-cols-2 lg:grid-cols-3 gap-5 mt-4 mr-4 mb-4">
+            {products.map((product) => (
+              <Product
+                product={product}
+                key={product._id}
+                addToCart={addToCart}
+              ></Product>
+            ))}
+          </div>
+          <div>
+            <h3 className="mb-2">
+              Currently selected page: {page} and {size}
+            </h3>
+            <div className="flex items-center gap-2">
+              <div>
+                {[...Array(pages).keys()].map((number) => (
+                  <button
+                    key={number}
+                    onClick={() => setPage(number + 1)}
+                    className={`btn btn-sm rounded-sm ml-1 ${
+                      page === number + 1 ? "btn-primary" : "btn-secondary"
+                    }`}
+                  >
+                    {number + 1}
+                  </button>
+                ))}
+              </div>
+              <select
+                onChange={(e) => setSize(e.target.value)}
+                className="border py-1 border-orange-600 outline-none"
+              >
+                <option value={5}>5</option>
+                <option selected value={10}>
+                  10
+                </option>
+                <option value={15}>15</option>
+                <option value={20}>20</option>
+              </select>
+            </div>
+          </div>
         </div>
         <div className="cart-container">
           <Cart cart={carts} clearCart={clearCart}>
