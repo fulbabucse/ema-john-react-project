@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 import { deleteShoppingCart, removeFromDb } from "../../utilities/fakedb";
 import Cart from "../Cart/Cart";
@@ -10,7 +9,7 @@ const Orders = () => {
   const [cart, setCart] = useState(initialCart);
 
   const removeCartProduct = (id) => {
-    const restProduct = cart.filter((product) => product.id !== id);
+    const restProduct = cart.filter((product) => product._id !== id);
     setCart(restProduct);
     removeFromDb(id);
   };
@@ -25,7 +24,7 @@ const Orders = () => {
       <div className="grid grid-cols-1 gap-4 my-4 w-3/4 mx-auto">
         {cart.map((product) => (
           <ProductCart
-            key={product.id}
+            key={product._id}
             product={product}
             removeCartProduct={removeCartProduct}
           ></ProductCart>
