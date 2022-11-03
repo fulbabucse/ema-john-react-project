@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   addToDb,
   deleteShoppingCart,
@@ -27,22 +27,38 @@ const Shop = () => {
         setCount(data.count);
         setProducts(data.products);
       });
-  }, []);
+  }, [page, size]);
 
   const pages = Math.ceil(count / size);
 
   useEffect(() => {
     const storedCart = getStoredCart();
     const savedCart = [];
-    for (const id in storedCart) {
-      const addedProduct = products.find((product) => product._id === id);
-      if (addedProduct) {
-        const quantity = storedCart[id];
-        addedProduct.quantity = quantity;
-        savedCart.push(addedProduct);
-      }
-    }
-    setCarts(savedCart);
+
+    const ids = Object.keys(storedCart);
+
+    console.log(ids);
+
+    fetch("http://localhost:5000/productsIds", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(ids),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        for (const id in storedCart) {
+          const addedProduct = data.find((product) => product._id === id);
+          if (addedProduct) {
+            const quantity = storedCart[id];
+            addedProduct.quantity = quantity;
+            savedCart.push(addedProduct);
+          }
+        }
+        setCarts(savedCart);
+      })
+      .catch((err) => console.error(err));
   }, [products]);
 
   const addToCart = (selectedProduct) => {
@@ -82,16 +98,16 @@ const Shop = () => {
           </div>
           <div>
             <h3 className="mb-2">
-              Currently selected page: {page} and {size}
+              Currently selected page: {page + 1} and {size}
             </h3>
             <div className="flex items-center gap-2">
               <div>
                 {[...Array(pages).keys()].map((number) => (
                   <button
                     key={number}
-                    onClick={() => setPage(number + 1)}
+                    onClick={() => setPage(number)}
                     className={`btn btn-sm rounded-sm ml-1 ${
-                      page === number + 1 ? "btn-primary" : "btn-secondary"
+                      page === number ? "btn-primary" : "btn-secondary"
                     }`}
                   >
                     {number + 1}
@@ -102,12 +118,12 @@ const Shop = () => {
                 onChange={(e) => setSize(e.target.value)}
                 className="border py-1 border-orange-600 outline-none"
               >
-                <option value={5}>5</option>
+                <option value="5">5</option>
                 <option selected value={10}>
                   10
                 </option>
-                <option value={15}>15</option>
-                <option value={20}>20</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
               </select>
             </div>
           </div>

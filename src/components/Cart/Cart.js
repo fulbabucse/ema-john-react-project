@@ -1,8 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTrashAlt,
-  faArrowAltCircleRight,
-} from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import "./Cart.css";
 
